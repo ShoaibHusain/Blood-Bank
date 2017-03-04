@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase'
+import {browserHistory} from 'react-router'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+
+const style = {
+  margin: 12,
+};
 
 class Signup extends Component {
 
@@ -11,17 +19,21 @@ class Signup extends Component {
 
     signup(e) {
             e.preventDefault();
-            let name = this.refs.name.value;
-            let email = this.refs.email.value;
-            let pass = this.refs.Password.value;
+            let name = this.refs.name.getValue();
+            let email = this.refs.email.getValue();
+            let pass = this.refs.Password.getValue();
             console.log(name, email, pass)
+
+          
             firebase.auth().createUserWithEmailAndPassword(email, pass)
             .then((user)=>{
                 let userDetails ={
                     useremail:user.email
 
                 }
-                firebase.database().ref("user/").push(userDetails)
+                  browserHistory.push('/login')
+
+                firebase.database().ref("users/"+user.uid).set(userDetails)
             })
             .catch(function(error) {
   // Handle Errors here.
@@ -36,25 +48,41 @@ class Signup extends Component {
     render(){
         
         return(
-        <div>
+            <MuiThemeProvider>
+        <div className="button">
 
         <h1>Signup</h1>
 
         <form onSubmit={this.signup}>
 
         <div>
-            <label>Name</label><br/>
-            <input type="text" ref="name" /><br/> <br />
-            <label>Email</label><br/>
-            <input type="email" ref="email" /><br/><br />
-            <label>Password</label><br/>
-            <input type="password" ref="Password" /><br/><br />
-            <button >Signup</button>
+            <TextField
+      hintText="Hint Text"
+      floatingLabelText="Name"
+      ref="name"
+    /><br />
+    <TextField
+      hintText="Hint Text"
+      floatingLabelText="Email"
+      ref="email"
+    /><br />
+    <TextField
+      hintText="Password Field"
+      floatingLabelText="Password"
+      type="password"
+      ref="Password"
+
+    /><br />
+    <RaisedButton label="Signup" type="submit" primary={true} style={style} />
+
+    
+           
         </div>            
          
         </form>
 
         </div>
+        </MuiThemeProvider>
         )
     }
 }

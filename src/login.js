@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import {browserHistory} from 'react-router'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
+
+const style = {
+  margin: 12,
+};
+
 class Login extends Component {
 
     constructor(props){
@@ -10,12 +19,14 @@ class Login extends Component {
 
     login(ev) {
     ev.preventDefault();
-    console.log(this.refs.email.value);
-    console.log(this.refs.Password.value);
-   let email = this.refs.email.value;
-    let password = this.refs.Password.value;
+   let email = this.refs.email.getValue();
+    let password = this.refs.Password.getValue();
+
+    console.log(email);
+    console.log(password);
+
     firebase.auth().signInWithEmailAndPassword
-    (email,password).catch(function(error) {
+(email,password).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
   var errorMessage = error.message;
@@ -34,16 +45,17 @@ class Login extends Component {
           // this.setState({
           //   auth: auth
           // })
-         browserHistory.push('/signup')
+         browserHistory.push('/home')
 
          console.log("logn success")
-         firebase.database().ref('login/').push(userDetails)
+        //  firebase.database().ref('login/').push(userDetails)
   
     })
     
   }
     render(){
         return(
+            <MuiThemeProvider>
              <div>
 
         <h1>Login</h1>
@@ -51,16 +63,30 @@ class Login extends Component {
         <form onSubmit={this.login}>
 
         <div>
-            <label>Email</label><br />
-            <input type="email" ref="email" /><br /><br />
-            <label>Password</label><br />
-            <input type="password" ref="Password" /><br /><br />
-            <button>Login</button>
+         <TextField
+      hintText="Hint Text"
+      floatingLabelText="Email"
+      ref="email"
+    /><br />
+     <TextField
+      hintText="Password Field"
+      floatingLabelText="Password"
+      type="password"
+      ref="Password"
+    /><br />
+
+    <RaisedButton label="Login" type="submit" primary={true} style={style} />
+
+
+           
         </div>            
 
         </form>
 
         </div>
+
+        </MuiThemeProvider>
+
         )
        
     }

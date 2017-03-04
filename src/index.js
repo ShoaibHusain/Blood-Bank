@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import  Signup  from './SignUp';
+import  Home from './home';
 import Login from './login.js';
-import {Router,browserHistory,Route} from  'react-router'
+import {Router,browserHistory,Route} from 'react-router'
 
 
 
@@ -16,6 +17,7 @@ ReactDOM.render(
   <Route path="signup" component={Signup}></Route>
   <Route path="login" component={Login}></Route>
   </Route>
+  <Route path="home" component={Home}></Route>
    <Route></Route>
 
   
